@@ -12,7 +12,7 @@ x_head_name=x_image_name(1:indlas-1);
 indlas=strfind(y_image_name,'.');
 y_head_name=y_image_name(1:indlas-1);
 
-%% ÔØÈëÍ¼Ïñ±àÂë
+%% è½½å…¥å›¾åƒç¼–ç 
 x_code_name=strcat(code_path,x_head_name);
 x_code_name=strcat(x_code_name,'.mat');
 y_code_name=strcat(code_path,y_head_name);
@@ -22,7 +22,7 @@ y_code_=load(y_code_name);
 x_code=x_code_.code;
 y_code=y_code_.code;
 
-%%%ÔØÈë×ø±ê
+%%%è½½å…¥åæ ‡
 x_local_name=strcat(x_head_name,'_local');
 y_local_name=strcat(y_head_name,'_local');
 x_local_name=strcat(x_local_name,'.mat');
@@ -34,12 +34,12 @@ y_local_=load(y_local_name);
 y_local=y_local_.local;
 y_local_axis=y_local(1:2,:);
 
-%%%ÔØÈë¾àÀë¾ØÕó
+%%%è½½å…¥è·ç¦»çŸ©é˜µ
 dist_name=strcat(dist_path,'dist.mat');
 dist_=load(dist_name);
 dist=dist_.dist;
 
-%%%Í¼ÏñÆ´½Ó
+%%%å›¾åƒæ‹¼æ¥
 x_image=imread(strcat(x_image_path,x_image_name));
 y_image=imread(strcat(y_image_path,y_image_name));
 sz_x_image=size(x_image);
@@ -51,28 +51,25 @@ sz_x_code=size(x_code);
 sz_y_code=size(y_code);
 
 
-%% ²éÑ¯
+%% æŸ¥è¯¢
 for i=1:sz_x_code(2)
     dist_match=zeros(1,sz_y_code(2));
     for j=1:sz_y_code(2)
         for k=1:16   
-            dist_match(1,j)=dist_match(1,j)+dist(x_code(k,i),y_code(k,j),k);      %%%²éÑ¯¾àÀë¾ØÕó¼ÆËã¾àÀë
+            dist_match(1,j)=dist_match(1,j)+dist(x_code(k,i),y_code(k,j),k);      %%%æŸ¥è¯¢è·ç¦»çŸ©é˜µè®¡ç®—è·ç¦»
         end
         
     end    
     dist_match=dist_match.^(1/2);
-    [nearest1 index]=min(dist_match);                                                   %%% ÕÒµ½×î½üÁÙ
+    [nearest1 index]=min(dist_match);                                                   %%% æ‰¾åˆ°æœ€è¿‘ä¸´
     dist_match(index)=10e100;
-    [nearest2 index2]=min(dist_match);                                                  %%% ÕÒµ½´Î½üÁÚ
+    [nearest2 index2]=min(dist_match);                                                  %%% æ‰¾åˆ°æ¬¡è¿‘é‚»
     ratio=nearest1/nearest2;
 
-    if ratio<0.8                                                                                      %%% Èç¹ûÂú×ã¾àÀëÌõ¼ş
+    if ratio<0.8                                                                                      %%% å¦‚æœæ»¡è¶³è·ç¦»æ¡ä»¶
         beginn=[x_local_axis(1,i),y_local_axis(1,index)+sz_x_image(2)];
         endd=[x_local_axis(2,i),y_local_axis(2,index)];
-        plot(beginn,endd,'g');                                                                      %%%Á¬Ïß
+        plot(beginn,endd,'g');                                                                      %%%è¿çº¿
         
-    end
-    if i>15                                                                 %%%²âÊÔÇ°15¸öÌØÕ÷
-        break
     end
 end
